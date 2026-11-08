@@ -1,0 +1,154 @@
+/* 가로형 16:9 (LG 스탠바이미 27" 1920×1080 화면 비율). 화면 안에 최대한 크게 */
+.stage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100vw, 177.78vh);
+  width: min(100vw, 177.78dvh);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  touch-action: none;
+  background: #0a0a0a;
+}
+.stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 글래스모피즘 시작 버튼 (화면 하단 고정, 평면) */
+.startBtn {
+  position: absolute;
+  left: 50%;
+  bottom: calc(8% + env(safe-area-inset-bottom, 0px));
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: 0.85em 1.8em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08));
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  font: 500 clamp(11px, 1.75vh, 14px) / 1 "Galmuri11", "Neue Haas Grotesk Display Pro", "Helvetica Neue",
+    Helvetica, "Inter Tight", "Noto Sans KR", sans-serif;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.5s ease, transform 0.5s ease, background 0.2s ease;
+}
+.startBtn:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.12));
+}
+.startBtn:active {
+  transform: translateX(-50%) scale(0.97);
+}
+.startBtn.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+}
+
+/* 뒤로가기 (왼쪽 위, 글래스). 씬 0 이 아닐 때만 나타남 */
+.backBtn {
+  position: absolute;
+  top: calc(3% + env(safe-area-inset-top, 0px));
+  left: 3%;
+  z-index: 3;
+  padding: 0.6em 1.1em 0.6em 0.9em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.06));
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: #fff;
+  font: 400 clamp(10px, 1.5vh, 13px) / 1 "Galmuri11", "Neue Haas Grotesk Display Pro", "Helvetica Neue",
+    Helvetica, sans-serif;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
+}
+.backBtn:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.1));
+}
+.arr {
+  display: inline-block;
+  margin-right: 0.45em;
+}
+.backBtn.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-8px);
+}
+
+/* 라디오 다이얼: 마지막 씬에서 프레임 아래에 등장. 잡고 돌리면 하루(아침→밤) 영상이 그 시점으로 */
+.dial {
+  position: absolute;
+  left: 50%;
+  bottom: calc(7% + env(safe-area-inset-bottom, 0px));
+  z-index: 3;
+  width: clamp(120px, 22vh, 210px);
+  aspect-ratio: 2 / 1.15;
+  transform: translate(-50%, 0);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dial.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 30px);
+}
+.scale {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.knob {
+  position: absolute;
+  left: 50%;
+  top: 86.9%;
+  width: 50%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  cursor: grab;
+  background: radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 38%),
+    repeating-conic-gradient(from 0deg, #e9ddf6 0 4deg, #c9b6e4 4deg 8deg);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35), inset 0 -4px 8px rgba(80, 60, 120, 0.35),
+    inset 0 3px 6px rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}
+.knob::before {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fbf7ff, #d9caef 70%);
+  box-shadow: inset 0 2px 5px rgba(80, 60, 120, 0.35);
+}
+.ptr {
+  position: absolute;
+  left: 50%;
+  top: 7%;
+  width: 7%;
+  height: 36%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: #3a2a5c;
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.8);
+}
+.dial[data-drag="true"] .knob {
+  cursor: grabbing;
+}
