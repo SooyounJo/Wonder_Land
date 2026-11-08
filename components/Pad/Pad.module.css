@@ -159,7 +159,8 @@
 
 /* ---------- 1. 차(꽃 세 송이) ---------- */
 .tea {
-  background: radial-gradient(110% 80% at 50% 45%, #4fbf6a 0%, #2f8f48 55%, #1f6b35 100%);
+  overflow: hidden;
+  background: #2f7a4a;
 }
 
 .pick {
@@ -209,6 +210,100 @@
   text-anchor: middle;
 }
 
+/* 테이블 사진을 화면 가득(cover) 채우고, 꽃·접시 위치는 사진 기준 비율로 */
+.teaTable {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, 100dvh * 1344 / 752);
+  aspect-ratio: 1344 / 752;
+  transform: translate(-50%, -50%);
+  background: url("/pad/table.webp") center / 100% 100% no-repeat;
+}
+
+.plateGlow {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  pointer-events: none;
+}
+
+.plateGlowOn {
+  transform: translate(-50%, -50%) scale(1.02);
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.55),
+    0 0 60px 18px rgba(255, 255, 240, 0.45);
+}
+
+.teaFlower {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  touch-action: none;
+  cursor: grab;
+  transition:
+    transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+    opacity 0.4s ease,
+    filter 0.3s ease;
+  filter: drop-shadow(0.4vh 1vh 0.8vh rgba(0, 35, 15, 0.45));
+}
+
+.teaFlower img {
+  height: 100%;
+  width: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.teaActive {
+  filter: drop-shadow(0 0 2.4vh rgba(255, 255, 230, 0.75)) drop-shadow(0.4vh 1vh 0.8vh rgba(0, 35, 15, 0.45));
+}
+
+.teaDragging {
+  cursor: grabbing;
+  transition:
+    opacity 0.4s ease,
+    filter 0.3s ease;
+  filter: drop-shadow(1.6vh 3.2vh 2vh rgba(0, 35, 15, 0.45));
+}
+
+.teaName {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.6vh;
+  white-space: nowrap;
+  font-size: clamp(15px, 2.1vh, 22px);
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 40, 15, 0.8);
+  pointer-events: none;
+}
+
+.teaQuestion {
+  z-index: 4;
+  text-shadow: 0 2px 14px rgba(0, 40, 15, 0.65);
+}
+
+.teaHint {
+  position: absolute;
+  bottom: max(28px, 5vh);
+  left: 0;
+  right: 0;
+  z-index: 4;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(16px, 2.2vw, 22px);
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0, 40, 15, 0.8);
+  pointer-events: none;
+}
+
 /* ---------- 2. 의자 세 개 ---------- */
 .chairs {
   background: linear-gradient(#5fae8a 0%, #4f9c7a 62%, #3f8a3a 62%, #2f7a2c 100%);
@@ -216,7 +311,7 @@
 
 /* ---------- 3. 과자 버튼(three.js) ---------- */
 .snacks {
-  background: #f6b9cf;
+  background: #c98a9c;
 }
 
 .canvasWrap {
@@ -231,8 +326,11 @@
 }
 
 .snacks .question {
-  color: #8a2f57;
+  top: max(10px, 1.6vh);
   z-index: 1;
+  font-size: clamp(15px, 2vw, 21px);
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(120, 30, 70, 0.7);
 }
 
 /* ---------- 마지막: 카드 ---------- */
