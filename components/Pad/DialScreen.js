@@ -37,7 +37,7 @@ export default function DialScreen({ value, onChange, onSelect }) {
   return (
     <div className={cx(styles.screen, styles.dialScreen)}>
       <div ref={wrapRef} className={styles.canvasWrap} />
-      <p className={cx(styles.question, styles.radioQuestion)}>라디오 주파수를 맞춰보세요</p>
+      <p className={cx(styles.question, styles.radioQuestion)}>슬라이더를 밀어 원하는 주파수에서 Go를 눌러주세요</p>
     </div>
   );
 }

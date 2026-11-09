@@ -24,7 +24,7 @@ export default function SnackScreen({ onHover, onSelect }) {
   return (
     <div className={cx(styles.screen, styles.snacks)}>
       <div ref={wrapRef} className={styles.canvasWrap} />
-      <p className={styles.question}>먹고 싶은 과자를 골라보세요</p>
+      <p className={styles.question}>먹고 싶은 과자를 선택해보세요</p>
     </div>
   );
 }

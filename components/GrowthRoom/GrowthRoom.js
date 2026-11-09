@@ -106,11 +106,8 @@ export default function GrowthRoom() {
 
   return (
     <div ref={stageRef} className={styles.stage}>
-      <div
-        ref={dialRef}
-        className={cx(styles.dial, scene !== "dial" && styles.hide)}
-        aria-label="시간 다이얼"
-      >
+      {/* 시간대는 패드 라디오 슬라이더로 고르므로 메인 다이얼은 늘 숨김(엔진이 바늘 위치를 계속 쓰므로 요소는 남겨 둠) */}
+      <div ref={dialRef} className={cx(styles.dial, styles.hide)} aria-hidden>
         <DialScale className={styles.scale} />
         <div ref={knobRef} className={styles.knob}>
           <div className={styles.ptr} />

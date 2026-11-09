@@ -67,28 +67,46 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(120% 90% at 50% 40%, #2a2740 0%, #0a0a0a 70%);
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.startVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
 }
 
 .title {
+  position: relative;
+  z-index: 1;
   margin: 0;
   font-family: "Doto", monospace;
   font-weight: 900;
   font-size: clamp(56px, 11vw, 120px);
   letter-spacing: 0.06em;
   line-height: 1;
+  text-shadow: 0 2px 18px rgba(20, 10, 30, 0.55);
 }
 
 .subtitle {
+  position: relative;
+  z-index: 1;
   margin: 10px 0 0;
   font-family: "Doto", monospace;
   font-weight: 900;
   font-size: clamp(14px, 2.2vw, 22px);
   letter-spacing: 0.3em;
   opacity: 0.8;
+  text-shadow: 0 2px 14px rgba(20, 10, 30, 0.55);
 }
 
 .pad .startBtn {
+  position: relative;
+  z-index: 1;
   margin-top: clamp(48px, 9vh, 96px);
   padding: 22px 56px;
   border-radius: 999px;
@@ -127,6 +145,15 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
+/* 화면 전체에 덮는 노이즈 질감(메인 화면과 동일) */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
 /* ---------- 테스트 페이지(/test/...) ---------- */
 .testBar {
   position: absolute;
@@ -149,6 +176,7 @@
   border-radius: 8px;
   color: #fff;
   text-decoration: none;
+  white-space: nowrap;
   opacity: 0.75;
 }
 
@@ -182,6 +210,110 @@
 }
 
 /* ---------- 장면별 공통 ---------- */
+/* 메인 화면을 봐야 할 때: 패드 화면을 흐리게 깔고 안내를 띄움 */
+.layer {
+  position: absolute;
+  inset: 0;
+  transition:
+    filter 0.7s ease,
+    transform 0.7s ease;
+}
+
+/* 공간 전체가 아주 천천히 떠다님: 이동 · 기울기 · 크기를 주기가 서로 다른 세 움직임으로 나눠 반복이 티 나지 않게
+   (가장자리가 드러나지 않도록 살짝 확대해 둠) */
+.drift {
+  position: absolute;
+  inset: 0;
+  scale: 1.03;
+  will-change: transform;
+  animation:
+    driftMove 19s ease-in-out infinite,
+    driftTilt 27s ease-in-out infinite,
+    driftBreath 31s ease-in-out infinite;
+}
+
+@keyframes driftMove {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: 5px -6px;
+  }
+  50% {
+    translate: -3px -3px;
+  }
+  75% {
+    translate: -6px 4px;
+  }
+}
+
+@keyframes driftTilt {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  33% {
+    rotate: 0.18deg;
+  }
+  66% {
+    rotate: -0.14deg;
+  }
+}
+
+@keyframes driftBreath {
+  0%,
+  100% {
+    scale: 1.03;
+  }
+  50% {
+    scale: 1.042;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift {
+    animation: none;
+  }
+}
+
+.layerBlur {
+  filter: blur(14px) brightness(0.72) saturate(0.9);
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+.lookOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+  animation: lookIn 0.7s ease both;
+}
+
+.lookTitle {
+  margin: 0;
+  font-size: clamp(24px, 3.4vw, 36px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+}
+
+@keyframes lookIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .screen {
   position: absolute;
   inset: 0;
@@ -191,16 +323,19 @@
   justify-content: center;
 }
 
+/* 네 화면(차·의자·과자·라디오) 공통 안내 문구 */
 .question {
   position: absolute;
-  top: max(64px, 9vh);
+  top: max(10px, 1.6vh);
   left: 0;
   right: 0;
+  z-index: 1;
   margin: 0;
   text-align: center;
-  font-size: clamp(20px, 3vw, 32px);
-  font-weight: 700;
+  font-size: clamp(15px, 2vw, 21px);
+  font-weight: 500;
   letter-spacing: 0.02em;
+  color: #fff;
   pointer-events: none;
 }
 
@@ -265,8 +400,7 @@
 }
 
 .teaQuestion {
-  z-index: 4;
-  text-shadow: 0 2px 14px rgba(0, 40, 15, 0.65);
+  text-shadow: 0 1px 8px rgba(0, 40, 15, 0.75);
 }
 
 .teaHint {
@@ -283,9 +417,14 @@
   pointer-events: none;
 }
 
-/* ---------- 2. 의자 세 개 ---------- */
+/* ---------- 2. 의자 병 세 개(three.js) ---------- */
 .chairs {
-  background: linear-gradient(#5fae8a 0%, #4f9c7a 62%, #3f8a3a 62%, #2f7a2c 100%);
+  overflow: hidden;
+  background: #4f9a3a;
+}
+
+.chairs .question {
+  text-shadow: 0 1px 8px rgba(20, 50, 120, 0.75);
 }
 
 /* ---------- 3. 과자 버튼(three.js) ---------- */
@@ -305,10 +444,6 @@
 }
 
 .snacks .question {
-  top: max(10px, 1.6vh);
-  z-index: 1;
-  font-size: clamp(15px, 2vw, 21px);
-  color: #fff;
   text-shadow: 0 1px 8px rgba(120, 30, 70, 0.7);
 }
 
@@ -344,36 +479,31 @@
   top: calc(3.5vh + 1.2vh);
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 176px;
   overflow: hidden;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .card {
-  --h: min(88vh, 135vw);
   position: relative;
-  height: var(--h);
-  aspect-ratio: 0.6;
-  margin-top: 2vh;
-  /* 카드 자신에게 쓴 cq 단위는 바깥 기준이 되므로, 카드 자체 치수는 --h로 계산 (자식은 cqh 사용) */
-  container-type: size;
-  box-sizing: border-box;
-  padding: calc(var(--h) * 0.075) calc(var(--h) * 0.045) calc(var(--h) * 0.055);
-  display: flex;
-  flex-direction: column;
-  border-radius: calc(var(--h) * 0.032);
-  color: #3b2a1f;
-  background:
-    radial-gradient(120% 70% at 50% 45%, #fffaf0 0%, #f4ead8 70%, #ebdcc2 100%);
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 calc(var(--h) * 0.012) #f4ead8,
-    inset 0 0 0 calc(var(--h) * 0.012 + 2px) #b5893f,
-    inset 0 0 0 calc(var(--h) * 0.016 + 2px) #f4ead8,
-    inset 0 0 0 calc(var(--h) * 0.016 + 3px) #b5893f;
+  height: 100%;
+  max-height: 100%;
+  aspect-ratio: 5 / 7;
+  max-width: min(86vw, 100%);
+  border-radius: 22px;
+  overflow: hidden;
+  background: #e4d9c8;
+  box-shadow: 0 28px 54px rgba(0, 0, 0, 0.42);
   transform-origin: 50% 0;
   animation: eject 2.6s cubic-bezier(0.3, 0.7, 0.3, 1) both;
+}
+
+.cardCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* 프린터처럼 끊어서 밀려 나온 뒤 살짝 흔들림 */
@@ -404,107 +534,39 @@
   }
 }
 
-.corner {
+.saveStrip {
   position: absolute;
-  top: 3.4cqh;
-  left: 5cqw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Doto", monospace;
-  font-weight: 900;
-  font-size: 3.4cqh;
-  line-height: 1;
-  color: #a8442f;
-  gap: 0.6cqh;
-}
-
-.cornerFlip {
-  top: auto;
-  left: auto;
-  bottom: 3.4cqh;
-  right: 5cqw;
-  transform: rotate(180deg);
-}
-
-.cardHead {
-  text-align: center;
-}
-
-.cardKicker {
-  margin: 0;
-  font-family: "Doto", monospace;
-  font-weight: 900;
-  font-size: 1.7cqh;
-  letter-spacing: 0.22em;
-  color: #9a7a4a;
-}
-
-.cardName {
-  margin: 1cqh 0 0;
-  font-family: "Galmuri11", sans-serif;
-  font-weight: 700;
-  font-size: 6.4cqh;
-  line-height: 1.1;
-  color: #3b2a1f;
-}
-
-.cardFlower {
-  flex: 1;
-  min-height: 0;
+  left: 50%;
+  bottom: 62px;
+  z-index: 16;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  padding: 8px 18px 8px 8px;
+  border-radius: 18px;
+  background: rgba(244, 239, 228, 0.95);
+  color: #2a2622;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
-.cardFlower img {
-  height: 92%;
-  max-width: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 1.4cqh 1.2cqh rgba(80, 50, 10, 0.3));
-  pointer-events: none;
+.saveStrip img,
+.saveWait {
+  width: 78px;
+  height: 78px;
+  flex: none;
 }
 
-.cardRows {
-  list-style: none;
+.saveWait {
+  border-radius: 8px;
+  background: repeating-linear-gradient(45deg, #e4d9c8, #e4d9c8 6px, #f3ecdf 6px, #f3ecdf 12px);
+}
+
+.saveStrip p {
   margin: 0;
-  padding: 2cqh 0 0;
-  border-top: 2px solid #b5893f;
-  display: grid;
-  gap: 1.5cqh;
-}
-
-.cardRow {
-  display: grid;
-  grid-template-columns: 7.4cqh 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 2.4cqh;
-  align-items: baseline;
-}
-
-.cardLabel {
-  grid-row: span 2;
-  align-self: center;
-  white-space: nowrap;
-  padding: 0.6cqh 0;
-  border-radius: 999px;
-  background: #3b2a1f;
-  color: #f4ead8;
-  text-align: center;
-  font-family: "Galmuri11", sans-serif;
-  font-size: 1.7cqh;
-}
-
-.cardPick {
-  font-family: "Galmuri11", sans-serif;
-  font-weight: 700;
-  font-size: 2.3cqh;
-}
-
-.cardCost {
-  font-family: "Galmuri11", sans-serif;
-  font-size: 1.9cqh;
-  color: #8a5a35;
+  font-size: 15px;
+  line-height: 1.55;
+  white-space: pre-line;
 }
 
 /* ---------- 4. 다이얼 ---------- */
@@ -513,9 +575,5 @@
 }
 
 .radioQuestion {
-  top: max(8px, 1.2vh);
-  z-index: 1;
-  font-size: clamp(15px, 2vw, 21px);
-  color: #fff;
   text-shadow: 0 1px 8px rgba(20, 70, 50, 0.75);
 }

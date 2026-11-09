@@ -1,0 +1,50 @@
+.page {
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 28px 18px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #c9bfb0;
+  color: #2a2622;
+  font-family: "Galmuri11", "Noto Sans KR", sans-serif;
+}
+
+.kicker {
+  margin: 0 0 16px;
+  font-family: "Doto", monospace;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+}
+
+.card {
+  width: min(420px, 100%);
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(40, 30, 16, 0.28);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.actions a {
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #2a2622;
+  color: #f4efe4;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.note {
+  margin: 16px 0 0;
+  max-width: 320px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4e4338;
+}
