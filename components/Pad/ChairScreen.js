@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { padText } from "@/lib/growthRoom/copy";
+import { localized, OUTFITS } from "@/lib/growthRoom/story";
 import { createChairBottles } from "@/lib/pad/chairBottles";
 import styles from "./Pad.module.css";
 
@@ -13,7 +15,7 @@ const BOTTLES = [
 ];
 
 // 병을 집으면 본화면에 그 옷의 설명이 뜨고(hover), 가운데 흙자리에 놓으면 구덩이로 빠지며 선택(select)
-export default function ChairScreen({ onHover, onSelect }) {
+export default function ChairScreen({ onHover, onSelect, lang = "ko" }) {
   const wrapRef = useRef(null);
   const handlers = useRef({ onHover, onSelect });
   handlers.current = { onHover, onSelect };
@@ -39,19 +41,21 @@ export default function ChairScreen({ onHover, onSelect }) {
     []
   );
 
+  const copy = padText(lang);
+  const seatName = (i) => localized(OUTFITS[i], lang).name;
   const hint =
     chosen >= 0
-      ? `${BOTTLES[chosen].name}을 골랐어요`
+      ? copy.chairChose(seatName(chosen))
       : over
-        ? "여기에 놓으면 선택돼요"
+        ? copy.chairOver
         : active >= 0
-          ? `${BOTTLES[active].name} — 가운데 구덩이에 놓으면 선택돼요`
-          : "병을 집으면 화면에 설명이 나와요";
+          ? copy.chairHold(seatName(active))
+          : copy.chairIdle;
 
   return (
     <div className={cx(styles.screen, styles.chairs)}>
       <div ref={wrapRef} className={styles.canvasWrap} />
-      <p className={styles.question}>앉고 싶은 의자 병을 집어 가운데 구덩이에 놓아주세요</p>
+      <p className={styles.question}>{copy.chairQ}</p>
       <p className={styles.teaHint}>{hint}</p>
     </div>
   );

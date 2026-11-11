@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
+import { padText } from "@/lib/growthRoom/copy";
 import { createRadioSlider } from "@/lib/pad/radioSlider";
 import styles from "./Pad.module.css";
 
 const cx = (...names) => names.filter(Boolean).join(" ");
 
 // 라디오 패널 사진 위의 슬라이더(three.js)를 잡고 밀어 시간을 고르고, 패널의 GO 버튼으로 선택
-export default function DialScreen({ value, onChange, onSelect }) {
+export default function DialScreen({ value, onChange, onSelect, lang = "ko" }) {
   const wrapRef = useRef(null);
   const sliderRef = useRef(null);
   const handlers = useRef({ onChange, onSelect });
@@ -37,7 +38,7 @@ export default function DialScreen({ value, onChange, onSelect }) {
   return (
     <div className={cx(styles.screen, styles.dialScreen)}>
       <div ref={wrapRef} className={styles.canvasWrap} />
-      <p className={cx(styles.question, styles.radioQuestion)}>슬라이더를 밀어 원하는 주파수에서 Go를 눌러주세요</p>
+      <p className={cx(styles.question, styles.radioQuestion)}>{padText(lang).radioQ}</p>
     </div>
   );
 }

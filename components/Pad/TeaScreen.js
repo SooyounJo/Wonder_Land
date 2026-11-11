@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { padText } from "@/lib/growthRoom/copy";
+import { localized, TEAS } from "@/lib/growthRoom/story";
 import { createTeaCards } from "@/lib/pad/teaCards";
 import styles from "./Pad.module.css";
 
@@ -13,7 +15,7 @@ const CARDS = [
 ];
 
 // 카드를 집으면 본화면에 그 차의 특성이 뜨고(hover), 접시 위에 내려놓으면 선택(select)
-export default function TeaScreen({ onHover, onSelect }) {
+export default function TeaScreen({ onHover, onSelect, lang = "ko" }) {
   const wrapRef = useRef(null);
   const handlers = useRef({ onHover, onSelect });
   handlers.current = { onHover, onSelect };
@@ -39,19 +41,21 @@ export default function TeaScreen({ onHover, onSelect }) {
     []
   );
 
+  const copy = padText(lang);
+  const teaName = (i) => localized(TEAS[i], lang).name;
   const hint =
     chosen >= 0
-      ? `${CARDS[chosen].name} tea를 골랐어요`
+      ? copy.teaChose(teaName(chosen))
       : over
-        ? "여기에 놓으면 선택돼요"
+        ? copy.teaOver
         : active >= 0
-          ? `${CARDS[active].name} — 접시 위에 올리면 선택돼요`
-          : "카드를 집으면 화면에 차 설명이 나와요";
+          ? copy.teaHold(teaName(active))
+          : copy.teaIdle;
 
   return (
     <div className={cx(styles.screen, styles.tea)}>
       <div ref={wrapRef} className={styles.canvasWrap} />
-      <p className={cx(styles.question, styles.teaQuestion)}>마시고 싶은 차 카드를 집어 접시에 올려주세요</p>
+      <p className={cx(styles.question, styles.teaQuestion)}>{copy.teaQ}</p>
       <p className={styles.teaHint}>{hint}</p>
     </div>
   );

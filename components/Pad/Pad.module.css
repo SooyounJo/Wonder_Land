@@ -104,10 +104,37 @@
   text-shadow: 0 2px 14px rgba(20, 10, 30, 0.55);
 }
 
+.lang {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 4px;
+  margin-top: clamp(36px, 6vh, 64px);
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(16, 18, 28, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.pad .lang button {
+  min-width: 108px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: clamp(16px, 2.1vw, 20px);
+}
+
+.pad .lang button.langOn {
+  background: rgba(255, 255, 255, 0.94);
+  color: #241c28;
+}
+
 .pad .startBtn {
   position: relative;
   z-index: 1;
-  margin-top: clamp(48px, 9vh, 96px);
+  margin-top: 22px;
   padding: 22px 56px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);

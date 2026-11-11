@@ -1,0 +1,81 @@
+.page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  background: #0a0a0a;
+  color: #fff;
+  font-family: "Galmuri11", "Noto Sans KR", sans-serif;
+}
+
+.kicker {
+  margin: 0;
+  font-family: "Doto", monospace;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  opacity: 0.55;
+}
+
+.title {
+  margin: 14px 0 28px;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.rows {
+  width: min(440px, 100%);
+  margin: 0;
+}
+
+.rows > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 16px;
+}
+
+.rows > div:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.rows dt {
+  opacity: 0.62;
+}
+
+.rows dd {
+  margin: 0;
+  text-align: right;
+}
+
+.kill {
+  margin-top: 36px;
+  padding: 18px 36px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #241c28;
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.kill:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.note {
+  width: min(440px, 100%);
+  margin: 18px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+  opacity: 0.62;
+}
