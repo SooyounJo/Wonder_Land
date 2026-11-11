@@ -95,7 +95,7 @@ export default function Status() {
       </button>
       <p className={styles.note}>
         {online
-          ? "메인 화면과 패드를 처음부터 다시 엽니다. 조작이 5분 없어도 같이 다시 열립니다."
+          ? "메인 화면과 패드를 처음부터 다시 엽니다. 조작이 10분 없어도 같이 다시 열립니다."
           : "서버에 연결하는 중입니다."}
       </p>
     </main>

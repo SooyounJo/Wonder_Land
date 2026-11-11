@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createGrowthRoom } from "@/lib/growthRoom/engine";
 import { createRoomAudio } from "@/lib/growthRoom/roomAudio";
-import { playSfx } from "@/lib/pad/sfx";
+import { ensure, playSfx } from "@/lib/pad/sfx";
 import { connectRemote } from "@/lib/remote/socket";
 import DialScale from "./DialScale";
 import styles from "./GrowthRoom.module.css";
@@ -85,10 +85,14 @@ export default function GrowthRoom() {
           case "lang":
             engine.setLang(msg.lang);
             break;
-          case "sfx":
+          case "sfx": {
             audio.unlock();
-            playSfx(msg.name, msg.args);
+            const ctx = ensure();
+            const run = () => playSfx(msg.name, msg.args);
+            if (ctx && ctx.state !== "running") ctx.resume().then(run).catch(run);
+            else run();
             break;
+          }
           case "peers":
             if (msg.pads) sendState();
             break;

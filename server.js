@@ -2,7 +2,7 @@
 // - display(메인 화면): 지금 장면 상태를 보냄 → 모든 pad로 전달
 // - pad(아이패드): 선택·다이얼 명령을 보냄 → 모든 display로 전달
 // - control(상황 확인): 연결 상태를 보고, 메인·패드를 한꺼번에 새로고침
-const IDLE_MS = 5 * 60 * 1000;
+const IDLE_MS = 10 * 60 * 1000;
 const ACTIONS = new Set(["start", "back", "hover", "select", "dial", "dialSelect", "lang"]);
 const dev = !process.argv.includes("--prod");
 if (!dev) process.env.NODE_ENV = "production";
@@ -91,7 +91,7 @@ app.prepare().then(() => {
     });
   });
 
-  // 패드 조작이 5분 없으면 메인 화면과 패드를 처음부터 다시 연다
+  // 패드 조작이 10분 없으면 메인 화면과 패드를 처음부터 다시 연다
   const idle = setInterval(() => {
     if (Date.now() - lastActivity < IDLE_MS) return;
     if (clients.display.size + clients.pad.size === 0) return;
