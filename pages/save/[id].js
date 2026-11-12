@@ -41,25 +41,34 @@ export default function SaveCard() {
     <main className={styles.page}>
       <Head>
         <title>{copy.saveTitle}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
       </Head>
       <p className={styles.kicker}>GROWTH MEASUREMENT ROOM</p>
       {state === "ready" && (
         <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={styles.card} src={`/api/card/${id}`} alt={copy.saveTitle} />
-          <div className={styles.actions}>
-            <a href={`/api/card/${id}`} download>
-              {copy.savePng}
-            </a>
-            <a href={jpeg} download={langQuery === "en" ? "growth-card.jpg" : "성장측정실.jpg"}>
-              {copy.saveJpg}
-            </a>
+          <div className={styles.stage}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.card} src={`/api/card/${id}`} alt={copy.saveTitle} />
           </div>
-          <p className={styles.note}>{copy.saveHint}</p>
+          <div className={styles.dock}>
+            <div className={styles.actions}>
+              <a href={`/api/card/${id}`} download>
+                {copy.savePng}
+              </a>
+              <a href={jpeg} download={langQuery === "en" ? "growth-card.jpg" : "성장측정실.jpg"}>
+                {copy.saveJpg}
+              </a>
+            </div>
+            <p className={styles.note}>{copy.saveHint}</p>
+          </div>
         </>
       )}
-      {state === "loading" && <p className={styles.note}>{copy.saveLoading}</p>}
+      {state === "loading" && (
+        <p className={styles.note}>{copy.saveLoading}</p>
+      )}
       {state === "gone" && <p className={styles.note}>{copy.saveGone}</p>}
     </main>
   );

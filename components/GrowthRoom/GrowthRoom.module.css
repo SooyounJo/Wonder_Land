@@ -55,27 +55,6 @@
   transform: translate(-50%, 12px);
 }
 
-/* 뒤로가기 (왼쪽 위, 글래스). 씬 0 이 아닐 때만 나타남 */
-.backBtn {
-  position: absolute;
-  top: calc(3% + env(safe-area-inset-top, 0px));
-  left: 3%;
-  z-index: 3;
-  padding: 0.6em 1.1em 0.6em 0.9em;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.06));
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  backdrop-filter: blur(12px) saturate(160%);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  color: #fff;
-  font: 400 clamp(10px, 1.5vh, 13px) / 1 "Galmuri11", "Neue Haas Grotesk Display Pro", "Helvetica Neue",
-    Helvetica, sans-serif;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
-}
 .heightReason {
   position: absolute;
   right: 5.5%;
@@ -100,18 +79,6 @@
   transform: translateY(0);
 }
 
-.backBtn:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.1));
-}
-.arr {
-  display: inline-block;
-  margin-right: 0.45em;
-}
-.backBtn.hide {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-8px);
-}
 
 /* 라디오 다이얼: 마지막 씬에서 프레임 아래에 등장. 잡고 돌리면 하루(아침→밤) 영상이 그 시점으로 */
 .dial {

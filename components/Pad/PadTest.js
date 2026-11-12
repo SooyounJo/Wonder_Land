@@ -62,15 +62,25 @@ export default function PadTest({ screen }) {
         <button type="button" onClick={() => setLook((v) => !v)}>
           {look ? "바라보기 끄기" : "화면 바라보기"}
         </button>
-        {screen === "card" && (
-          <button
-            type="button"
-            onClick={() => setPicks((p) => ({ ...p, flower: (p.flower + 1) % FLOWERS.length }))}
-          >
-            다른 꽃
-          </button>
-        )}
       </div>
+      {screen === "card" && (
+        <div className={styles.testFlowers} aria-label="꽃 카드">
+          {FLOWERS.map((flower, i) => (
+            <button
+              key={flower.name}
+              type="button"
+              className={picks.flower === i ? styles.testFlowerOn : undefined}
+              onClick={() => {
+                setPicks((p) => ({ ...p, flower: i }));
+                setRun((n) => n + 1);
+              }}
+            >
+              <span className={styles.testFlowerNum}>{i + 1}</span>
+              <span className={styles.testFlowerName}>{flower.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
       <ol className={styles.testLog}>
         {log.map((t, i) => (
           <li key={i}>{t}</li>

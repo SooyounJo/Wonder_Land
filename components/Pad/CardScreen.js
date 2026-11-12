@@ -33,6 +33,7 @@ export default function CardScreen({ picks, lang = "ko" }) {
   const [note, setNote] = useState(copy.cardWait);
   const [ready, setReady] = useState(false);
   const [flipped, setFlipped] = useState(false);
+  const sceneRef = useRef(null);
   const key = picks ? [picks.flower, picks.tea, picks.outfit, picks.snack, picks.time, lang].join(":") : "";
   const flower = FLOWERS[picks?.flower] ?? FLOWERS[0];
 
@@ -84,15 +85,34 @@ export default function CardScreen({ picks, lang = "ko" }) {
 
   useEffect(() => {
     if (!ready) return undefined;
-    const flip = setTimeout(() => setFlipped(true), 3200);
-    return () => clearTimeout(flip);
+    const scene = sceneRef.current;
+    let cancelled = false;
+    const restMs = 380;
+    const startFlip = () => {
+      if (cancelled) return;
+      window.setTimeout(() => {
+        if (!cancelled) setFlipped(true);
+      }, restMs);
+    };
+    const anim = scene?.getAnimations?.()[0];
+    if (anim && anim.playState !== "finished") {
+      anim.finished.then(startFlip).catch(() => {});
+      return () => {
+        cancelled = true;
+      };
+    }
+    const fallback = window.setTimeout(startFlip, anim ? restMs : 2600 + restMs);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallback);
+    };
   }, [ready, key]);
 
   return (
     <div className={styles.cardScreen}>
       <div className={styles.slot} />
       <div className={styles.cardTrack}>
-        <div className={styles.cardScene}>
+        <div className={styles.cardScene} ref={sceneRef}>
           <div className={`${styles.cardFlip}${flipped ? ` ${styles.cardFlipOn}` : ""}`}>
             <div className={`${styles.cardFace} ${styles.cardBack}`} aria-hidden>
               {/* eslint-disable-next-line @next/next/no-img-element */}

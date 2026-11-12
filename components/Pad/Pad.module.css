@@ -218,6 +218,49 @@
   opacity: 1;
 }
 
+.testFlowers {
+  position: absolute;
+  right: 12px;
+  top: 56px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.pad .testFlowers button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 72px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #222;
+  line-height: 1.15;
+}
+
+.pad .testFlowers button.testFlowerOn {
+  background: #fff;
+  box-shadow: inset 0 0 0 2px #6fcfb4;
+}
+
+.testFlowerNum {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.testFlowerName {
+  font-size: 11px;
+  opacity: 0.72;
+}
+
 .testLog {
   position: absolute;
   right: 10px;
@@ -547,15 +590,18 @@
 
 .cardBack {
   background: #f4efe6;
-  display: grid;
-  place-items: center;
 }
 
 .cardBack img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 104%;
+  height: 104%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  object-position: center;
 }
 
 .cardFront {
@@ -565,6 +611,8 @@
 
 .cardCanvas {
   display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
 }

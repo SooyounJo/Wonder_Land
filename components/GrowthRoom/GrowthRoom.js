@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createGrowthRoom } from "@/lib/growthRoom/engine";
 import { createRoomAudio } from "@/lib/growthRoom/roomAudio";
 import { ensure, playSfx } from "@/lib/pad/sfx";
@@ -15,7 +15,6 @@ export default function GrowthRoom() {
   const reasonRef = useRef(null);
   const engineRef = useRef(null);
   const audioRef = useRef(null);
-  const [scene, setScene] = useState("loop");
 
   useEffect(() => {
     const audio = createRoomAudio();
@@ -48,7 +47,6 @@ export default function GrowthRoom() {
       onSceneChange: (s) => {
         if (current === "loop" && s !== "loop") audio.unlock();
         current = s;
-        setScene(s);
         audio.setScene(s, engine ? engine.getDial() : 1);
         sendState();
       },
@@ -112,12 +110,6 @@ export default function GrowthRoom() {
       document.removeEventListener("visibilitychange", onVis);
     };
   }, []);
-
-  const handleBack = (e) => {
-    e.stopPropagation();
-    engineRef.current?.back();
-  };
-
   return (
     <div ref={stageRef} className={styles.stage}>
       {/* 시간대는 패드 라디오 슬라이더로 고르므로 메인 다이얼은 늘 숨김(엔진이 바늘 위치를 계속 쓰므로 요소는 남겨 둠) */}
@@ -127,14 +119,6 @@ export default function GrowthRoom() {
           <div className={styles.ptr} />
         </div>
       </div>
-      <button
-        type="button"
-        className={cx(styles.backBtn, scene === "loop" && styles.hide)}
-        aria-label="뒤로가기"
-        onClick={handleBack}
-      >
-        <span className={styles.arr}>←</span>뒤로
-      </button>
       <p ref={reasonRef} className={styles.heightReason} aria-live="polite" />
     </div>
   );
