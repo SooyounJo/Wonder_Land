@@ -506,31 +506,96 @@
   top: calc(3.5vh + 1.2vh);
   left: 0;
   right: 0;
-  bottom: 176px;
+  bottom: 18px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.card {
-  position: relative;
-  height: 100%;
-  max-height: 100%;
-  aspect-ratio: 5 / 7;
-  max-width: min(86vw, 100%);
-  border-radius: 22px;
-  overflow: hidden;
-  background: #e4d9c8;
-  box-shadow: 0 28px 54px rgba(0, 0, 0, 0.42);
+.cardScene {
+  height: 96%;
+  max-height: 96%;
+  aspect-ratio: 5 / 9;
+  max-width: min(58vw, 100%);
+  perspective: 1400px;
   transform-origin: 50% 0;
   animation: eject 2.6s cubic-bezier(0.3, 0.7, 0.3, 1) both;
+}
+
+.cardFlip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1.05s cubic-bezier(0.4, 0.15, 0.2, 1);
+}
+
+.cardFlipOn {
+  transform: rotateY(180deg);
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 28px 54px rgba(0, 0, 0, 0.42);
+}
+
+.cardBack {
+  background: #f4efe6;
+  display: grid;
+  place-items: center;
+}
+
+.cardBack img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cardFront {
+  background: #f3eee4;
+  transform: rotateY(180deg);
 }
 
 .cardCanvas {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.cardMark,
+.cardMarkB {
+  position: absolute;
+  color: #ff6eb4;
+  font: 700 clamp(28px, 5vh, 42px) / 1 "Galmuri11", sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.cardMark {
+  top: 7%;
+  left: 8%;
+}
+
+.cardMarkB {
+  right: 8%;
+  bottom: 7%;
+  transform: rotate(180deg);
+}
+
+.cardSpark {
+  width: 18%;
+  aspect-ratio: 1;
+  background:
+    linear-gradient(#d6ef6a, #d6ef6a) center / 18% 100% no-repeat,
+    linear-gradient(#d6ef6a, #d6ef6a) center / 100% 18% no-repeat;
+  box-shadow: 0 0 0 6px rgba(214, 239, 106, 0.18);
+  border-radius: 2px;
 }
 
 /* 프린터처럼 끊어서 밀려 나온 뒤 살짝 흔들림 */
@@ -561,39 +626,78 @@
   }
 }
 
-.saveStrip {
+.qrModal {
   position: absolute;
-  left: 50%;
-  bottom: 62px;
+  right: 3.4%;
+  bottom: 11%;
   z-index: 16;
-  transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 8px 18px 8px 8px;
-  border-radius: 18px;
-  background: rgba(244, 239, 228, 0.95);
-  color: #2a2622;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
-}
-
-.saveStrip img,
-.saveWait {
-  width: 78px;
-  height: 78px;
-  flex: none;
-}
-
-.saveWait {
-  border-radius: 8px;
-  background: repeating-linear-gradient(45deg, #e4d9c8, #e4d9c8 6px, #f3ecdf 6px, #f3ecdf 12px);
-}
-
-.saveStrip p {
+  gap: 10px;
+  width: min(132px, 18vw);
   margin: 0;
-  font-size: 15px;
-  line-height: 1.55;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+
+.qrModalOn {
+  opacity: 0.92;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.qrModal img,
+.saveWait {
+  width: 108px;
+  height: 108px;
+  flex: none;
+  border-radius: 0;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.45));
+}
+
+.saveWait {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.qrModal p {
+  margin: 0;
+  font: 500 clamp(12px, 1.7vh, 16px) / 1.65 "Galmuri11", "Noto Sans KR", sans-serif;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
   white-space: pre-line;
+}
+
+.cardEssay {
+  position: absolute;
+  left: 3.4%;
+  bottom: 11%;
+  z-index: 15;
+  width: min(240px, 26vw);
+  margin: 0;
+  color: #fff;
+  font: 500 clamp(12px, 1.7vh, 16px) / 1.65 "Galmuri11", "Noto Sans KR", sans-serif;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  white-space: pre-line;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+
+.cardEssayOn {
+  opacity: 0.92;
+  transform: translateY(0);
 }
 
 /* ---------- 4. 다이얼 ---------- */

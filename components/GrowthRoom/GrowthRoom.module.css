@@ -76,6 +76,30 @@
   -webkit-tap-highlight-color: transparent;
   transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
 }
+.heightReason {
+  position: absolute;
+  right: 5.5%;
+  bottom: 9%;
+  z-index: 4;
+  max-width: min(32%, 320px);
+  margin: 0;
+  color: #fff;
+  font: 500 clamp(12px, 2vh, 18px) / 1.45 "Galmuri11", "Noto Sans KR", sans-serif;
+  letter-spacing: 0.02em;
+  text-align: right;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+  white-space: pre-line;
+}
+
+.heightReason[data-on="1"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .backBtn:hover {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.1));
 }

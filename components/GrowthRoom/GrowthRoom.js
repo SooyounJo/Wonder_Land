@@ -12,6 +12,7 @@ export default function GrowthRoom() {
   const stageRef = useRef(null);
   const dialRef = useRef(null);
   const knobRef = useRef(null);
+  const reasonRef = useRef(null);
   const engineRef = useRef(null);
   const audioRef = useRef(null);
   const [scene, setScene] = useState("loop");
@@ -43,6 +44,7 @@ export default function GrowthRoom() {
       stage: stageRef.current,
       dialEl: dialRef.current,
       knob: knobRef.current,
+      reasonEl: reasonRef.current,
       onSceneChange: (s) => {
         if (current === "loop" && s !== "loop") audio.unlock();
         current = s;
@@ -133,6 +135,7 @@ export default function GrowthRoom() {
       >
         <span className={styles.arr}>←</span>뒤로
       </button>
+      <p ref={reasonRef} className={styles.heightReason} aria-live="polite" />
     </div>
   );
 }

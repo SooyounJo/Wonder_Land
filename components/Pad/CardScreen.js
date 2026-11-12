@@ -21,7 +21,7 @@ async function originForPhone() {
   return `${protocol}//${lanIp}${port ? `:${port}` : ""}`;
 }
 
-// 위쪽 투입구에서 카드가 밀려 나오고, 휴대폰으로 찍으면 그림 파일을 받을 수 있다
+// 주신 픽셀 카드가 세로로 나온 뒤 뒤집히면, 꽃·반짝과 네 선택의 결과가 보임. QR은 왼쪽 문장과 같은 높이의 오른쪽 아래
 export default function CardScreen({ picks, lang = "ko" }) {
   const canvasRef = useRef(null);
   const picksRef = useRef(picks);
@@ -31,9 +31,14 @@ export default function CardScreen({ picks, lang = "ko" }) {
   const copy = padText(lang);
   const [qr, setQr] = useState("");
   const [note, setNote] = useState(copy.cardWait);
+  const [ready, setReady] = useState(false);
+  const [flipped, setFlipped] = useState(false);
   const key = picks ? [picks.flower, picks.tea, picks.outfit, picks.snack, picks.time, lang].join(":") : "";
+  const flower = FLOWERS[picks?.flower] ?? FLOWERS[0];
 
   useEffect(() => {
+    setReady(false);
+    setFlipped(false);
     const canvas = canvasRef.current;
     const current = picksRef.current;
     const currentLang = langRef.current;
@@ -48,6 +53,7 @@ export default function CardScreen({ picks, lang = "ko" }) {
       canvas.width = drawn.width;
       canvas.height = drawn.height;
       canvas.getContext("2d").drawImage(drawn, 0, 0);
+      setReady(true);
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
       const name = localized(FLOWERS[current.flower], currentLang).name || "card";
       const saved = await fetch(`/api/card?name=${encodeURIComponent(name)}`, {
@@ -63,7 +69,7 @@ export default function CardScreen({ picks, lang = "ko" }) {
         margin: 1,
         width: 280,
         errorCorrectionLevel: "Q",
-        color: { dark: "#2a2622", light: "#f4efe4" },
+        color: { dark: "#ffffff", light: "#00000000" },
       });
       if (cancel) return;
       setQr(url);
@@ -76,15 +82,30 @@ export default function CardScreen({ picks, lang = "ko" }) {
     };
   }, [key]);
 
+  useEffect(() => {
+    if (!ready) return undefined;
+    const flip = setTimeout(() => setFlipped(true), 3200);
+    return () => clearTimeout(flip);
+  }, [ready, key]);
+
   return (
     <div className={styles.cardScreen}>
       <div className={styles.slot} />
       <div className={styles.cardTrack}>
-        <article className={styles.card} aria-label={copy.cardLabel}>
-          <canvas ref={canvasRef} width={1000} height={1400} className={styles.cardCanvas} />
-        </article>
+        <div className={styles.cardScene}>
+          <div className={`${styles.cardFlip}${flipped ? ` ${styles.cardFlipOn}` : ""}`}>
+            <div className={`${styles.cardFace} ${styles.cardBack}`} aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={flower?.card} alt="" draggable={false} />
+            </div>
+            <article className={`${styles.cardFace} ${styles.cardFront}`} aria-label={copy.cardLabel}>
+              <canvas ref={canvasRef} width={900} height={1620} className={styles.cardCanvas} />
+            </article>
+          </div>
+        </div>
       </div>
-      <aside className={styles.saveStrip}>
+      <p className={`${styles.cardEssay}${flipped ? ` ${styles.cardEssayOn}` : ""}`}>{copy.cardEssay}</p>
+      <aside className={`${styles.qrModal}${qr ? ` ${styles.qrModalOn}` : ""}`}>
         {qr ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={qr} alt={copy.cardQr} draggable={false} />
