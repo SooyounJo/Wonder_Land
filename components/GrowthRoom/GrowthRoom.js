@@ -39,29 +39,44 @@ export default function GrowthRoom() {
         picks: current === "solo" ? engine.getPicks() : null,
       });
 
-    engine = createGrowthRoom({
-      stage: stageRef.current,
-      dialEl: dialRef.current,
-      knob: knobRef.current,
-      reasonEl: reasonRef.current,
-      onSceneChange: (s) => {
-        if (current === "loop" && s !== "loop") audio.unlock();
-        current = s;
-        audio.setScene(s, engine ? engine.getDial() : 1);
-        sendState();
-      },
-      onDialChange: (v) => {
-        audio.setDial(v);
-        remote?.send({ type: "dial", v });
-      },
-    });
-    engineRef.current = engine;
-    audio.setScene("loop");
+    const bootEngine = () => {
+      audio.toStart();
+      if (engine) {
+        engine.dispose();
+        engine = null;
+        engineRef.current = null;
+      }
+      current = "loop";
+      engine = createGrowthRoom({
+        stage: stageRef.current,
+        dialEl: dialRef.current,
+        knob: knobRef.current,
+        reasonEl: reasonRef.current,
+        onSceneChange: (s) => {
+          if (current === "loop" && s !== "loop") audio.unlock();
+          current = s;
+          audio.setScene(s, engine ? engine.getDial() : 1);
+          sendState();
+        },
+        onDialChange: (v) => {
+          audio.setDial(v);
+          remote?.send({ type: "dial", v });
+        },
+      });
+      engineRef.current = engine;
+      audio.setScene("loop");
+    };
+
+    bootEngine();
 
     remote = connectRemote("display", {
       onStatus: (up) => up && sendState(),
       onMessage: (msg) => {
         switch (msg.type) {
+          case "reset":
+            bootEngine();
+            sendState();
+            break;
           case "start":
             audio.unlock();
             engine.start();

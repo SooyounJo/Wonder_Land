@@ -51,8 +51,8 @@ app.prepare().then(() => {
     broadcast("display", peers);
     broadcast("control", statusMsg());
   };
-  const kick = () => {
-    const msg = { type: "reload" };
+  const kick = (hard = false) => {
+    const msg = { type: hard ? "reload" : "reset" };
     broadcast("display", msg);
     broadcast("pad", msg);
     lastState = null;
@@ -81,7 +81,7 @@ app.prepare().then(() => {
         broadcast("pad", msg);
         if (msg.type === "state") broadcast("control", statusMsg());
       } else if (role === "control") {
-        if (msg.type === "reload") kick();
+        if (msg.type === "reload") kick(true);
       } else {
         if (ACTIONS.has(msg.type)) lastActivity = Date.now();
         broadcast("display", msg);

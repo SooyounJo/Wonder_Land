@@ -25,12 +25,17 @@ export default function Pad() {
   const [dial, setDial] = useState(1);
   const [picks, setPicks] = useState(null);
   const [lang, setLang] = useState("ko");
+  const [held, setHeld] = useState(null);
 
   useEffect(() => {
     const remote = connectRemote("pad", {
       onStatus: setOnline,
       onMessage: (msg) => {
-        if (msg.type === "state") {
+        if (msg.type === "reset") {
+          setScene("loop");
+          setPicks(null);
+          setHeld(null);
+        } else if (msg.type === "state") {
           setScene(msg.scene);
           setPicks(msg.picks ?? null);
           if (typeof msg.dial === "number") setDial(msg.dial);
@@ -64,7 +69,6 @@ export default function Pad() {
   const mode = !connected ? "offline" : scene === "solo" && picks ? "card" : MODES[scene] ?? "wait";
 
   // 기다리는 동안엔 방금까지 쓰던 화면을 그대로(고른 상태 그대로) 흐리게 깔아 둠
-  const [held, setHeld] = useState(null);
   useEffect(() => {
     if (LIVE.has(mode)) setHeld({ mode, key: scene });
     else if (mode !== "wait") setHeld(null);
