@@ -22,8 +22,11 @@ const SCENES = {
 
 const clock = (ms) => {
   const s = Math.max(0, Math.ceil(ms / 1000));
-  const m = Math.floor(s / 60);
-  return `${m}분 ${String(s % 60).padStart(2, "0")}초`;
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  if (h > 0) return `${h}시간 ${String(m).padStart(2, "0")}분`;
+  return `${m}분 ${String(sec).padStart(2, "0")}초`;
 };
 
 export default function Status() {
@@ -95,7 +98,7 @@ export default function Status() {
       </button>
       <p className={styles.note}>
         {online
-          ? "메인 화면과 패드를 처음부터 다시 엽니다. 조작이 10분 없어도 같이 다시 열립니다."
+          ? "메인 화면과 패드를 처음부터 다시 엽니다. 시작 화면은 1시간마다, 플레이 중 한동안 멈추면 10분 뒤에 같이 다시 열립니다."
           : "서버에 연결하는 중입니다."}
       </p>
     </main>
